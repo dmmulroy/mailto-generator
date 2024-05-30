@@ -5,17 +5,27 @@
     email?: string;
   }>;
 
-  let nextId = 0;
+  let nextId = $state(0);
 
-  let subject = "Hello, [name]";
-  let referrer = "";
-  let cc = "";
+  let subject = $state("Hello, [name]");
+  let referrer = $state("");
+  let cc = $state("");
+  let showReferrals = $state(false);
 
-  let bodyTemplate =
-    "Hi [name], I wanted to introduce you to our financial services...";
+  let bodyTemplate = $state(
+    "Hi [name], I wanted to introduce you to our financial services...",
+  );
 
-  let referrals: Array<Referral> = [{ id: nextId++, name: "" }];
-  let referralsWithMailtoLinks: Array<Referral & { link: string }> = [];
+  let referrals: Array<Referral> = $state([{ id: nextId++, name: "" }]);
+  let referralsWithMailtoLinks: Array<Referral & { link: string }> =
+    $derived.by(() =>
+      referrals.map((referral) => ({
+        ...referral,
+        link: encodeURI(
+          `mailto:${referral.email}?subject=${replaceName(subject, referral.name)}&cc=${cc}&body=${replaceName(bodyTemplate, referral.name)}`,
+        ),
+      })),
+    );
 
   function addReferral() {
     referrals = referrals.concat({ id: nextId++, name: "" });
@@ -30,19 +40,13 @@
   }
 
   function generateMailtoLinks() {
-    referralsWithMailtoLinks = referrals.map((referral) => ({
-      ...referral,
-      link: encodeURI(
-        `mailto:${referral.email}?subject=${replaceName(subject, referral.name)}&cc=${cc}&body=${replaceName(bodyTemplate, referral.name)}`,
-      ),
-    }));
+    showReferrals = true;
   }
 </script>
 
 <main class="w-full flex justify-center pt-12">
   <div
-    class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-md"
-    data-v0-t="card"
+    class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-3xl"
   >
     <div class="flex flex-col space-y-1.5 p-6">
       <h3
@@ -145,41 +149,43 @@
               {#if index !== 0}
                 <button
                   class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
-                  on:click={() => removeReferral(referral.id)}>Remove</button
+                  onclick={() => removeReferral(referral.id)}>Remove</button
                 >{/if}
             </div>
           {/each}
           <button
             class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-            on:click={addReferral}
+            onclick={addReferral}
           >
             Add Referral
           </button>
         </div>
         <button
           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-          on:click={generateMailtoLinks}
+          onclick={generateMailtoLinks}
         >
           Generate Emails
         </button>
       </div>
-      {#each referralsWithMailtoLinks as referralWithMailtoLink}
-        <div class="flex items-center p-6">
-          <div class="grid gap-2">
-            <a
-              class="text-blue-500 hover:underline"
-              href={referralWithMailtoLink.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {referralWithMailtoLink.name}
-              {referralWithMailtoLink.email
-                ? referralWithMailtoLink.email
-                : "<no email provided>"}
-            </a>
+      {#if showReferrals}
+        {#each referralsWithMailtoLinks as referralWithMailtoLink}
+          <div class="flex items-center p-6">
+            <div class="grid gap-2">
+              <a
+                class="text-blue-500 hover:underline"
+                href={referralWithMailtoLink.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {referralWithMailtoLink.name}
+                {referralWithMailtoLink.email
+                  ? referralWithMailtoLink.email
+                  : "<no email provided>"}
+              </a>
+            </div>
           </div>
-        </div>
-      {/each}
+        {/each}
+      {/if}
     </div>
   </div>
 </main>

@@ -4,6 +4,7 @@
     name: string;
     email?: string;
   }>;
+
   let nextId = 0;
 
   let subject = "Hello, [name]";

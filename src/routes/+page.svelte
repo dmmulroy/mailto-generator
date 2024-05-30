@@ -7,7 +7,8 @@
   let nextId = 0;
 
   let subject = "Hello, [name]";
-  let cc: undefined | string = undefined;
+  let referrer = "";
+  let cc = "";
 
   let bodyTemplate =
     "Hi [name], I wanted to introduce you to our financial services...";
@@ -67,7 +68,7 @@
             type="text"
           />
         </div>
-        <div class="space-y-2" data-id="12">
+        <div class="space-y-2">
           <label
             class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             for="cc">CC</label
@@ -77,6 +78,18 @@
             placeholder="cc@example.com"
             type="email"
             bind:value={cc}
+          />
+        </div>
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="referrer">Referrer</label
+          ><input
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            id="referrer"
+            placeholder="John Deer"
+            type="text"
+            bind:value={referrer}
           />
         </div>
         <div class="space-y-2">
@@ -161,7 +174,7 @@
               {referralWithMailtoLink.name}
               {referralWithMailtoLink.email
                 ? referralWithMailtoLink.email
-                : "no email provided"}
+                : "<no email provided>"}
             </a>
           </div>
         </div>

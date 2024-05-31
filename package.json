@@ -28,7 +28,9 @@
   },
   "type": "module",
   "dependencies": {
-    "clsx": "^2.1.1"
+    "@types/uuid": "^9.0.8",
+    "clsx": "^2.1.1",
+    "uuid": "^9.0.1"
   },
   "trustedDependencies": [
     "@sveltejs/kit",

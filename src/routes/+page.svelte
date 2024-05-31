@@ -17,6 +17,7 @@
   );
 
   let referrals: Array<Referral> = $state([{ id: nextId++, name: "" }]);
+
   let referralsWithMailtoLinks: Array<Referral & { link: string }> =
     $derived.by(() =>
       referrals.map((referral) => ({

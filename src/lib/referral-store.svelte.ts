@@ -20,11 +20,11 @@ type ReferralStoreState = {
 };
 
 const defaultTemplate =
-	"Hi [referral_first_name],\n\n I wanted to introduce you to our financial services Professional [adviser_name]. We've been working together for a while now and they've helped us change the trajectory of our financial future. No pressure to meet, of course, but I think it would be worthwhile to schedule an intro call.\n\nBest,\n\n[referrer_name]";
+	"Hi [referral_first_name],\n\nI wanted to introduce you to our financial services professional [adviser_name]. We've been working together for a while now and they've helped us change the trajectory of our financial future. No pressure to meet, of course, but I think it would be worthwhile to schedule an intro call.\n\nBest,\n\n[referrer_name]";
 const defaultSubject = "Hello, [referral_name]";
 
 function compileTemplate(template: string, state: ReferralStoreState) {
-	return template
+	const result = template
 		.replaceAll(
 			"[referral_first_name]",
 			Name.getFirstName(state.addReferralState.name),
@@ -35,7 +35,7 @@ function compileTemplate(template: string, state: ReferralStoreState) {
 		)
 		.replaceAll(
 			"[referral_name]",
-			Name.getLastName(state.addReferralState.name),
+			Name.getFullName(state.addReferralState.name),
 		)
 		.replaceAll(
 			"[referrer_first_name]",
@@ -47,7 +47,7 @@ function compileTemplate(template: string, state: ReferralStoreState) {
 		)
 		.replaceAll(
 			"[referrer_name]",
-			Name.getLastName(state.emailTemplateState.referrer),
+			Name.getFullName(state.emailTemplateState.referrer),
 		)
 		.replaceAll(
 			"[adviser_first_name]",
@@ -59,26 +59,30 @@ function compileTemplate(template: string, state: ReferralStoreState) {
 		)
 		.replaceAll(
 			"[adviser_name]",
-			Name.getLastName(state.emailTemplateState.adviser),
+			Name.getFullName(state.emailTemplateState.adviser),
 		);
+
+	console.log(result);
+
+	return result;
 }
 
 const defaultState = {
 	emailTemplateState: {
 		subject: defaultSubject,
-		cc: "",
+		cc: "test@test.com",
 		referrer: {
-			first: "",
-			last: "",
+			first: "Dillon",
+			last: "Mulroy",
 		},
 		adviser: {
-			first: "",
-			last: "",
+			first: "Timothy",
+			last: "Mulroy",
 		},
 		template: defaultTemplate,
 	},
 	addReferralState: {
-		name: { first: "", last: "" },
+		name: { first: "Morgan", last: "Mulroy" },
 	},
 	referrals: [],
 };
@@ -109,10 +113,12 @@ export class ReferralStore {
 			cc: this.state.emailTemplateState.cc,
 		});
 
+		console.log({ params: params.toString() });
+
 		const mailtoLink = encodeURI(
 			`mailto:${
-				this.state.addReferralState.email ?? "<insert_email>"
-			}?${params.toString()}`,
+				this.state.addReferralState.email ?? ""
+			}?subject=${subject}&body=${body}&cc=${this.state.emailTemplateState.cc}`,
 		);
 
 		this.state.referrals.push(

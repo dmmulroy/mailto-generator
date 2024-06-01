@@ -24,7 +24,7 @@ const defaultTemplate =
 const defaultSubject = "Hello, [referral_name]";
 
 function compileTemplate(template: string, state: ReferralStoreState) {
-	const result = template
+	return template
 		.replaceAll(
 			"[referral_first_name]",
 			Name.getFirstName(state.addReferralState.name),
@@ -61,10 +61,6 @@ function compileTemplate(template: string, state: ReferralStoreState) {
 			"[adviser_name]",
 			Name.getFullName(state.emailTemplateState.adviser),
 		);
-
-	console.log(result);
-
-	return result;
 }
 
 const defaultState = {
@@ -107,14 +103,6 @@ export class ReferralStore {
 			this.state,
 		);
 
-		const params = new URLSearchParams({
-			subject,
-			body,
-			cc: this.state.emailTemplateState.cc,
-		});
-
-		console.log({ params: params.toString() });
-
 		const mailtoLink = encodeURI(
 			`mailto:${
 				this.state.addReferralState.email ?? ""
@@ -124,7 +112,7 @@ export class ReferralStore {
 		this.state.referrals.push(
 			Referral.make(
 				this.state.addReferralState.name,
-				this.referrer,
+				$state.snapshot(this.referrer),
 				mailtoLink,
 				this.state.addReferralState.email,
 			),

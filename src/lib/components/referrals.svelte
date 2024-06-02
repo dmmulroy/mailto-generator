@@ -24,7 +24,13 @@
             <div class="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm p-4">
               <div class="flex flex-row justify-between">
                 <div class="flex flex-col justify-between">
-                  <span class="text-lg font-semibold">{Name.getFullName(referral.name)}</span>
+                  <a
+                    class="text-blue-500 hover:underline"
+                    href={referral.mailtoLink} 
+                  >
+
+                    <span class="text-lg font-semibold">{Name.getFullName(referral.name)}</span>
+                  </a>
                 </div>
                 <button
                   class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-9 rounded-md px-3"
@@ -41,15 +47,7 @@
                 <span>Referred by: {Name.getFullName(referral.referrer)}</span>
                 <span>Created  {format(referral.timestamp,"EEE, MMM do yyyy")}</span>
               </div>
-              <div class="flex flex-row justify-between pt-2 gap-4">
-                <button 
-                  class="inline-flex grow items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 rounded-md px-8 "
-                  onclick={async ()=>
-                    navigator.clipboard.writeText(referral.mailtoLink)
-                  }
-                >
-                  Copy Link
-                </button>
+              <div class="flex flex-row justify-between items-center pt-2 gap-4">
                 <a 
                   href={referral.mailtoLink} 
                   class="inline-flex grow items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 rounded-md px-8 "

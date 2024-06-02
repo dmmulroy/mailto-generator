@@ -66,19 +66,19 @@ function compileTemplate(template: string, state: ReferralStoreState) {
 const defaultState = {
 	emailTemplateState: {
 		subject: defaultSubject,
-		cc: "test@test.com",
+		cc: "",
 		referrer: {
-			first: "Dillon",
-			last: "Mulroy",
+			first: "",
+			last: "",
 		},
 		adviser: {
-			first: "Timothy",
-			last: "Mulroy",
+			first: "",
+			last: "",
 		},
 		template: defaultTemplate,
 	},
 	addReferralState: {
-		name: { first: "Morgan", last: "Mulroy" },
+		name: { first: "", last: "" },
 	},
 	referrals: [],
 };
@@ -86,11 +86,7 @@ const defaultState = {
 export class ReferralStore {
 	private state: ReferralStoreState = $state(defaultState);
 
-	constructor(initialState?: ReferralStoreState) {
-		if (initialState) {
-			this.state = initialState;
-		}
-	}
+	constructor() {}
 
 	public hydrate = () => {
 		const maybeJson = localStorage.getItem("__store__");
@@ -135,6 +131,10 @@ export class ReferralStore {
 		);
 
 		this.clearAddReferralState();
+	};
+
+	public deleteReferral = (referralId: string) => {
+		this.state.referrals = this.referrals.filter(({ id }) => id !== referralId);
 	};
 
 	public clearAddReferralState = () => {
@@ -191,7 +191,7 @@ export class ReferralStore {
 		this.state.emailTemplateState.subject = subject;
 	}
 
-	public get referrals(): ReadonlyArray<Referral> {
+	public get referrals(): Array<Referral> {
 		return this.state.referrals;
 	}
 

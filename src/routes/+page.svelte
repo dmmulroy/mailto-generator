@@ -14,8 +14,8 @@
   });
 </script>
 
-<div class="max-w-7xl flex flex-col m-6 gap-4 p-4 md:p-8 rounded-lg border bg-card text-card-foreground shadow-sm">
-  <div class="hidden lg:flex lg:flex-row gap-4 max-h-[750px]">
+<div class="lg:max-w-7xl lg:w-[80rem] flex flex-col m-6 gap-4 p-4 md:p-8 rounded-lg border bg-card text-card-foreground shadow-sm">
+  <div class="hidden lg:flex lg:flex-row gap-4 max-h-[850px]">
     <EmailTemplateCard />
     <ReferralsCard />
   </div>

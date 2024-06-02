@@ -4,6 +4,6 @@
   let { children } : { children: Snippet} = $props();
 </script>
 
-<main class="w-screen flex justify-center">
+<main class="w-screen flex justify-center h-screem">
   {@render children()}
 </main>

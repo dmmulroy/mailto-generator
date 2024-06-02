@@ -21,7 +21,8 @@ type ReferralStoreState = {
 
 const defaultTemplate =
 	"Hi [referral_first_name],\n\nI wanted to introduce you to our financial services professional [advisor_name]. We've been working together for a while now and they've helped us change the trajectory of our financial future. No pressure to meet, of course, but I think it would be worthwhile to schedule an intro call.\n\nBest,\n\n[referrer_name]";
-const defaultSubject = "Hello, [referral_name]";
+
+const defaultSubject = "Introduction - [advisor_name]";
 
 function compileTemplate(template: string, state: ReferralStoreState) {
 	return template

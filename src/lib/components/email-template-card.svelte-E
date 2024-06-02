@@ -98,7 +98,7 @@
         <p class="flex flex-col text-sm pt-2 text-gray-500 dark:text-gray-400">
           <span class="mb-1">Available Template Parameters</span>
           <span
-            >- [advisor_first_name], [advisor_last_name], [advisor_name]</span
+            >- [adviser_first_name], [adviser_last_name], [adviser_name]</span
           >
           <span
             >- [referral_first_name], [referral_last_name], [referral_name]</span

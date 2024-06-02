@@ -156,7 +156,7 @@ export class ReferralStore {
 	}
 
 	public set advisor(advisor: Name) {
-		this.state.emailTemplateState.advisor = advisor;
+		this.state.emailTemplateState.adviser = adviser;
 	}
 
 	public get cc(): Readonly<string> {

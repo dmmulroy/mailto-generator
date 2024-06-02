@@ -6,6 +6,7 @@
   import { onMount } from "svelte";
 
   onMount(() => {
+    localStorage.clear();
     store.hydrate();
 
     $effect(() => {

@@ -96,28 +96,16 @@
         ></textarea>
 
         <p class="flex flex-col text-sm pt-2 text-gray-500 dark:text-gray-400">
-          <span class="mb-1">Template Parameters</span>
+          <span class="mb-1">Available Template Parameters</span>
           <span
-            >- Use [referral_first_name] to insert the referral's frist name</span
+            >- [adviser_first_name], [adviser_last_name], [adviser_name]</span
           >
           <span
-            >- Use [referral_last_name] to insert the referral's last name</span
-          >
-          <span>- Use [referral_name] to insert the referral's full name</span>
-          <span
-            >- Use [referrer_first_name] to insert the referrers's frist name</span
+            >- [referral_first_name], [referral_last_name], [referral_name]</span
           >
           <span
-            >- Use [referrer_last_name] to insert the referrer's last name</span
+            >- [referrer_first_name], [referrer_last_name], [referrer_name]</span
           >
-          <span>- Use [referrer_name] to insert the referrer's full name</span>
-          <span
-            >- Use [adviser_first_name] to insert the adviser's frist name</span
-          >
-          <span
-            >- Use [adviser_last_name] to insert the adviser's last name</span
-          >
-          <span>- Use [adviser_name] to insert the adviser's full name</span>
         </p>
       </div>
     </div>

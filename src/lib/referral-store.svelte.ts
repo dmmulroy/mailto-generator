@@ -92,6 +92,22 @@ export class ReferralStore {
 		}
 	}
 
+	public hydrate = () => {
+		const maybeJson = localStorage.getItem("__store__");
+
+		if (maybeJson) {
+			const state = JSON.parse(maybeJson);
+			this.state = state;
+		}
+	};
+
+	public persist = () => {
+		const snapshot = $state.snapshot(this.state);
+		const json = JSON.stringify(snapshot);
+
+		localStorage.setItem("__store__", json);
+	};
+
 	public addReferral = (): void => {
 		const body = compileTemplate(
 			this.state.emailTemplateState.template,

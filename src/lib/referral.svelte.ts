@@ -18,6 +18,7 @@ export type Referral = {
 	sent: boolean;
 	mailtoLink: string;
 	email?: string;
+	timestamp: number;
 };
 
 export const Referral = {
@@ -34,6 +35,7 @@ export const Referral = {
 			name,
 			referrer,
 			sent: false,
+			timestamp: Date.now(),
 		}),
 	toggleSent: (referral: Referral): Referral => ({
 		...referral,

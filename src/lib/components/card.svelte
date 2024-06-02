@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class="p-6 h-full rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-3xl"
+  class="p-6 h-full rounded-lg border bg-card text-card-foreground shadow-sm w-full "
 >
   {@render children()}
 </div>

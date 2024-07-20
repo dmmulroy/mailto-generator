@@ -3,6 +3,19 @@
   import { Name, Referral } from "$lib/referral.svelte";
   import { store } from "$lib/referral-store.svelte";
   import Card from "./card.svelte";
+
+  function makeEmail(referral: Referral): string {
+    return (
+      `Hi, ${Name.getFullName(referral.referrer)}<br/><br/>` +
+      `Thanks again for your willingness to introduce me to the people discussed. ` +
+      `As I mentioned, I'm including a couple links here for you to click to make ` +
+      `the intro easy. All you need to do is click each link and ensure their email ` +
+      `is included in the "To" line. Feel free to edit any of the text if you'd like.<br/><br/>` +
+      `<a href=${referral.mailtoLink}>Click here to refer ${Name.getFullName(referral.name)}</a><br/><br/>` +
+      `Thanks again!<br/><br/>` +
+      `${Name.getFirstName(store.advisor)}`
+    );
+  }
 </script>
 
 <Card>
@@ -68,26 +81,10 @@
                   href={`mailto:dillon.mulroy@gmail.com?subject=Referral%20Introductions`}
                   class="inline-flex grow items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 rounded-md px-8"
                   onclick={() => {
-                    console.log(
-                      `<a href="${referral.mailtoLink}">
-                          Click here to refer ${Name.getFullName(referral.name)}
-                        </a>`,
-                    );
                     const data = new ClipboardItem({
-                      "text/html": new Blob(
-                        [
-                          `Hi ${Name.getFullName(referral.referrer)}, 
-                             <br/>
-                             <a href=${referral.mailtoLink}>Click here to refer ${Name.getFullName(referral.name)}</a>
-
-                             <br/>
-Best,
-                             <br/>
-Dillon Mulroy
-                              `,
-                        ],
-                        { type: "text/html" },
-                      ),
+                      "text/html": new Blob([makeEmail(referral)], {
+                        type: "text/html",
+                      }),
                     });
                     navigator.clipboard
                       .write([data])

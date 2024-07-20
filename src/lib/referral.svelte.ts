@@ -1,20 +1,22 @@
 import { v4 } from "uuid";
 
-export type Name = {
+export type Contact = {
 	first: string;
 	last: string;
+  email?: string;
 };
 
-export const Name = {
-	getFirstName: (name: Name) => name.first,
-	getLastName: (name: Name) => name.last,
-	getFullName: (name: Name) => `${name.first} ${name.last}`,
+export const Contact = {
+	getFirstName: (name: Contact) => name.first,
+	getLastName: (name: Contact) => name.last,
+	getFullName: (name: Contact) => `${name.first} ${name.last}`,
+  getEmail: (contact: Contact) => contact.email
 };
 
 export type Referral = {
 	id: string;
-	name: Name;
-	referrer: Name;
+	contact: Contact;
+	referrer: Contact;
 	sent: boolean;
 	mailtoLink: string;
 	email?: string;
@@ -23,8 +25,8 @@ export type Referral = {
 
 export const Referral = {
 	make: (
-		name: Name,
-		referrer: Name,
+		contact: Contact,
+		referrer: Contact,
 		mailtoLink: string,
 		email?: string,
 	): Referral =>
@@ -32,7 +34,7 @@ export const Referral = {
 			email,
 			id: v4(),
 			mailtoLink,
-			name,
+			contact,
 			referrer,
 			sent: false,
 			timestamp: Date.now(),

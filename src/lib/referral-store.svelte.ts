@@ -1,15 +1,14 @@
-import { Name, Referral } from "./referral.svelte";
+import { Contact, Referral } from "./referral.svelte";
 
 type EmailTemplateState = {
 	subject: string;
-	cc: string;
-	advisor: Name;
-	referrer: Name;
+	advisor: Contact;
+	referrer: Contact;
 	template: string;
 };
 
 type AddReferralState = {
-	name: Name;
+	name: Contact;
 	email?: string;
 };
 
@@ -17,6 +16,7 @@ type ReferralStoreState = {
 	emailTemplateState: EmailTemplateState;
 	addReferralState: AddReferralState;
 	referrals: Array<Referral>;
+  version: number
 };
 
 const defaultTemplate =
@@ -28,53 +28,57 @@ function compileTemplate(template: string, state: ReferralStoreState) {
 	return template
 		.replaceAll(
 			"[referral_first_name]",
-			Name.getFirstName(state.addReferralState.name),
+			Contact.getFirstName(state.addReferralState.name),
 		)
 		.replaceAll(
 			"[referral_last_name]",
-			Name.getLastName(state.addReferralState.name),
+			Contact.getLastName(state.addReferralState.name),
 		)
 		.replaceAll(
 			"[referral_name]",
-			Name.getFullName(state.addReferralState.name),
+			Contact.getFullName(state.addReferralState.name),
 		)
 		.replaceAll(
 			"[referrer_first_name]",
-			Name.getFirstName(state.emailTemplateState.referrer),
+			Contact.getFirstName(state.emailTemplateState.referrer),
 		)
 		.replaceAll(
 			"[referrer_last_name]",
-			Name.getLastName(state.emailTemplateState.referrer),
+			Contact.getLastName(state.emailTemplateState.referrer),
 		)
 		.replaceAll(
 			"[referrer_name]",
-			Name.getFullName(state.emailTemplateState.referrer),
+			Contact.getFullName(state.emailTemplateState.referrer),
 		)
 		.replaceAll(
 			"[advisor_first_name]",
-			Name.getFirstName(state.emailTemplateState.advisor),
+			Contact.getFirstName(state.emailTemplateState.advisor),
 		)
 		.replaceAll(
 			"[advisor_last_name]",
-			Name.getLastName(state.emailTemplateState.advisor),
+			Contact.getLastName(state.emailTemplateState.advisor),
 		)
 		.replaceAll(
 			"[advisor_name]",
-			Name.getFullName(state.emailTemplateState.advisor),
+			Contact.getFullName(state.emailTemplateState.advisor),
 		);
 }
 
+const version = 0;
+
 const defaultState = {
+  version,
 	emailTemplateState: {
 		subject: defaultSubject,
-		cc: "",
 		referrer: {
 			first: "",
 			last: "",
+      email: "",
 		},
 		advisor: {
 			first: "",
 			last: "",
+      email: "",
 		},
 		template: defaultTemplate,
 	},
@@ -93,7 +97,15 @@ export class ReferralStore {
 		const maybeJson = localStorage.getItem("__store__");
 
 		if (maybeJson) {
-			const state = JSON.parse(maybeJson);
+			const state: ReferralStoreState = JSON.parse(maybeJson);
+      const maybeVersion = state?.version
+
+
+      if (maybeVersion !== version) {
+        this.state = defaultState
+        return
+      }
+
 			this.state = state;
 		}
 	};
@@ -119,7 +131,7 @@ export class ReferralStore {
 		const mailtoLink = encodeURI(
 			`mailto:${
 				this.state.addReferralState.email ?? ""
-			}?subject=${subject}&body=${body}&cc=${this.state.emailTemplateState.cc}`,
+			}?subject=${subject}&body=${body}&cc=${this.state.emailTemplateState.advisor.email}`,
 		);
 
 		this.state.referrals.push(
@@ -152,29 +164,38 @@ export class ReferralStore {
 		}
 	};
 
-	public get advisor(): Readonly<Name> {
+	public get advisor(): Readonly<Contact> {
 		return this.state.emailTemplateState.advisor;
 	}
 
-	public set advisor(advisor: Name) {
+	public set advisor(advisor: Contact) {
 		this.state.emailTemplateState.advisor = advisor;
 	}
 
-	public get cc(): Readonly<string> {
-		return this.state.emailTemplateState.cc;
+	public get advisorEmail(): Readonly<string | undefined> {
+		return this.state.emailTemplateState.advisor.email;
 	}
 
-	public set cc(cc: string) {
-		this.state.emailTemplateState.cc = cc;
+	public set advisorEmail(advisorEmail: string) {
+		this.state.emailTemplateState.advisor.email = advisorEmail;
 	}
 
-	public get referrer(): Readonly<Name> {
+	public get referrer(): Readonly<Contact> {
 		return this.state.emailTemplateState.referrer;
 	}
 
-	public set referrer(referrer: Name) {
+	public set referrer(referrer: Contact) {
 		this.state.emailTemplateState.referrer = referrer;
 	}
+
+	public get referrerEmail(): Readonly<string | undefined> {
+		return this.state.emailTemplateState.referrer.email;
+	}
+
+	public set referrerEmail(referrerEmail: string) {
+		this.state.emailTemplateState.referrer.email = referrerEmail;
+	}
+
 
 	public get template(): Readonly<string> {
 		return this.state.emailTemplateState.template;
@@ -202,6 +223,10 @@ export class ReferralStore {
 
 	public set referral(referral: AddReferralState) {
 		this.state.addReferralState = referral;
+	}
+
+	public get version(): Readonly<number> {
+		return this.state.version;
 	}
 }
 

@@ -1,20 +1,28 @@
 <script lang="ts">
   import { format } from "date-fns";
-  import { Name, Referral } from "$lib/referral.svelte";
+  import { Contact, Referral } from "$lib/referral.svelte";
   import { store } from "$lib/referral-store.svelte";
   import Card from "./card.svelte";
 
   function makeEmail(referral: Referral): string {
     return (
-      `Hi, ${Name.getFullName(referral.referrer)}<br/><br/>` +
+      `Hi, ${Contact.getFullName(referral.referrer)}<br/><br/>` +
       `Thanks again for your willingness to introduce me to the people discussed. ` +
       `As I mentioned, I'm including a couple links here for you to click to make ` +
       `the intro easy. All you need to do is click each link and ensure their email ` +
       `is included in the "To" line. Feel free to edit any of the text if you'd like.<br/><br/>` +
-      `<a href=${referral.mailtoLink}>Click here to refer ${Name.getFullName(referral.name)}</a><br/><br/>` +
+      `<a href=${referral.mailtoLink}>Click here to refer ${Contact.getFullName(referral.contact)}</a><br/><br/>` +
       `Thanks again!<br/><br/>` +
-      `${Name.getFirstName(store.advisor)}`
+      `${Contact.getFirstName(store.advisor)}`
     );
+  }
+
+  function makeAdvisorMailToLink() {
+    const mailToLink =
+      `mailto:${store.referrerEmail}?subject=Referral Introductions` +
+      `&body=The body of this email is in your clipboard. Please paste it here and delete this text.`;
+
+    return encodeURI(mailToLink);
   }
 </script>
 
@@ -38,7 +46,7 @@
               <div class="flex flex-row justify-between">
                 <div class="flex flex-col justify-between">
                   <span class="text-lg font-semibold"
-                    >{Name.getFullName(referral.name)}</span
+                    >{Contact.getFullName(referral.contact)}</span
                   >
                 </div>
                 <button
@@ -66,7 +74,9 @@
               <div
                 class="flex flex-row justify-between text-sm text-gray-500 dark:text-gray-400 pt-4"
               >
-                <span>Referred by: {Name.getFullName(referral.referrer)}</span>
+                <span
+                  >Referred by: {Contact.getFullName(referral.referrer)}</span
+                >
                 <span
                   >Created {format(
                     referral.timestamp,
@@ -78,7 +88,7 @@
                 class="flex flex-row justify-between items-center pt-2 gap-4"
               >
                 <a
-                  href={`mailto:dillon.mulroy@gmail.com?subject=Referral%20Introductions`}
+                  href={makeAdvisorMailToLink()}
                   class="inline-flex grow items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 rounded-md px-8"
                   onclick={() => {
                     const data = new ClipboardItem({
@@ -86,6 +96,8 @@
                         type: "text/html",
                       }),
                     });
+
+                    // todo bring in toast library to confirm clipboard copy
                     navigator.clipboard
                       .write([data])
                       .then(() => console.log("copied"))

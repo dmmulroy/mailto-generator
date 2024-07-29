@@ -35,7 +35,7 @@
   class="w-full rounded-lg border bg-card p-6 text-card-foreground shadow-sm"
 >
   <CardHeader>
-    <CardTitle class="text-2xl font-bold">Propsecting Tool</CardTitle>
+    <CardTitle class="text-2xl font-bold">Prospecting Tool</CardTitle>
   </CardHeader>
   <CardContent>
     <div class="grid grid-cols-3 gap-4">

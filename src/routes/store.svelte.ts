@@ -124,7 +124,7 @@ export class ReferralStore {
 
 	public get nominatorEmailBody(): Readonly<string> {
 		return (
-			`Hi, ${Contact.getFullName(store.nominator)}<br/><br/>` +
+			`Hi, ${Contact.getFirstName(store.nominator)}<br/><br/>` +
 			`Thanks again for your willingness to introduce me to the people discussed. ` +
 			`As I mentioned, I'm including a couple links here for you to click to make ` +
 			`the intro easy. All you need to do is click each link and ensure their email ` +
@@ -179,7 +179,7 @@ export class ReferralStore {
 		const mailToLink = encodeURI(
 			`mailto:${
 				referral.email ?? ""
-			}?subject=${this.subject}&body=${ReferralStore.compileTemplate(this.template, referral, this.state)}&cc=${this.state.advisor.email}`,
+			}?subject=${ReferralStore.compileTemplate(this.subject, referral, this.state)}&body=${ReferralStore.compileTemplate(this.template, referral, this.state)}&cc=${this.state.advisor.email}`,
 		);
 
 		return mailToLink;

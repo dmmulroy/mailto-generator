@@ -11,7 +11,7 @@ type ReferralStoreState = {
 };
 
 const defaultTemplate =
-	"Hi [referral_first_name],\n\nI wanted to introduce you to our financial services professional [advisor_name]. We've been working together for a while now and they've helped us change the trajectory of our financial future. No pressure to meet, of course, but I think it would be worthwhile to schedule an intro call.\n\nBest,\n\n[nominator_name]";
+	"Hi [referral_first_name],\n\nI wanted to introduce you to our financial services professional, [advisor_name]. We've been working together for a while now and they've helped us change the trajectory of our financial future. No pressure to meet, of course, but I think it would be worthwhile to schedule an intro call.\n\nBest,\n\n[nominator_name]";
 
 const defaultSubject = "Introduction - [advisor_name]";
 
@@ -124,7 +124,7 @@ export class ReferralStore {
 
 	public get nominatorEmailBody(): Readonly<string> {
 		return (
-			`Hi, ${Contact.getFirstName(store.nominator)}<br/><br/>` +
+			`Hi ${Contact.getFirstName(store.nominator)},<br/><br/>` +
 			`Thanks again for your willingness to introduce me to the people discussed. ` +
 			`As I mentioned, I'm including a couple links here for you to click to make ` +
 			`the intro easy. All you need to do is click each link and ensure their email ` +

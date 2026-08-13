@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "https://mailto-generator.mulroy.workers.dev/:path*",
+      "permanent": true
+    }
+  ]
+}
